@@ -89,6 +89,13 @@
     regex: "^#max_connections"
   when: setup_db_no_gl | default(false)
 
+- name: Reduce service stop timeout
+  lineinfile:
+     dest: "/usr/lib/systemd/system/postgresql-14.service"
+     line: "TimeoutStopSec=10"
+     regexp: "^TimeoutStopSec=1h"
+  when: setup_db_no_gl | default(false)
+
 - name: Restart Postgres
   service:
     name: "postgresql-{{ postgresql_version }}"
